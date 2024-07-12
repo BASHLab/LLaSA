@@ -1,0 +1,35 @@
+{
+    "hhar": {
+        "0": "biking",
+        "1": "sitting",
+        "2": "descending stairs",
+        "3": "climbing stairs",
+        "4": "standing",
+        "5": "walking"
+    },
+    "motion": {
+        "0": "descending stairs",
+        "1": "climbing stairs",
+        "2": "sitting",
+        "3": "standing",
+        "4": "walking",
+        "5": "jogging"
+    },
+    "shoaib": {
+        "0": "walking",
+        "1": "sitting",
+        "2": "standing",
+        "3": "jogging",
+        "4": "biking",
+        "5": "climbing stairs",
+        "6": "descending stairs"
+    },
+    "uci": {
+        "0": "walking",
+        "1": "climbing stairs",
+        "2": "descending stairs",
+        "3": "sitting",
+        "4": "standing",
+        "5": "lying"
+    }
+}
