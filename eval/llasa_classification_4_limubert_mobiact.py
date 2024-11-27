@@ -24,7 +24,7 @@ torch.use_deterministic_algorithms = True
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
-PER_CLASS_SAMPLES = 100
+PER_CLASS_SAMPLES = 10
 
 
 unique_classes_dict = {'sitting':0, 'standing': 1, 'strais up':2, 'stairs down':3, 'jumping':4, 'jogging':5, 'walking':6}
@@ -42,12 +42,12 @@ print(unique_classes_dict)
 
 
 
-data_file_name = "/hdd/LLM/MobiAct/mobiact_20hz_data.npy"
-label_file_name = "/hdd/LLM/MobiAct/mobiact_20hz_label.npy"
+data_file_name = "/home/simran/MobiAct/mobiact_20hz_data.npy"
+label_file_name = "/home/simran/MobiAct/mobiact_20hz_label.npy"
 
-
-# model_path = "/hdd/LLM/llava_llasa_first_test_model"
-model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-lora"
+model_path = "/home/simran/LLaVA/checkpoints7/llava-v1.5-13b-llasa2-limu4"
+# model_path = "/home/simran/llava_llasa_first_test_model"
+# model_path = "/home/simran/LLaVA/checkpoints7/llava-v1.5-13b-llasa2-limu4-lr3e-5-mmlr1e-4-e1-r8-a8-proj1-lora"
 # model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-pretrain"
 
 answer_format = "The identified class is: "
@@ -62,10 +62,10 @@ prompt = (
     # "identified class as a summary followed by 'Class:'."
     # "Don't write a full sentence."
 )
-# image_file = "/hdd/LLM/limuBERT_data/train_llasa/images/sensor_image_20000_1.npy"
+# image_file = "/home/simran/limuBERT_data/train_llasa/images/sensor_image_20000_1.npy"
 
 
-result_f = open("/hdd/LLM/SLU/results/llasa_mobi.txt","w")
+result_f = open("/home/simran/SLU/results/llasa_mobiact_13b.txt","w")
 # sample_indices = [5, 9, 12, 1199, 2000]
 
 
@@ -90,7 +90,7 @@ print(label_count_dict)
 for idx in tqdm(range(len(data))):
     # sample_index = random.randint(0, len(data))
     sample_index = idx
-    image_file = f"/hdd/LLM/MobiAct/images/mobi_image_{sample_index}.npy"
+    image_file = f"/home/simran/MobiAct/images/mobi_image_{sample_index}.npy"
 
     if not os.path.exists(image_file):
         continue
@@ -103,8 +103,8 @@ for idx in tqdm(range(len(data))):
     result_f.write(image_file+"\n")
     args = type('Args', (), {
         "model_path": model_path,
-        # "model_base": None,
-        "model_base": "lmsys/vicuna-7b-v1.5",
+        "model_base": None,
+        # "model_base": "lmsys/vicuna-13b-v1.5-16K",
         "model_name": get_model_name_from_path(model_path),
         "query": prompt,
         "conv_mode": None,
@@ -145,4 +145,4 @@ disp = ConfusionMatrixDisplay(
     confusion_matrix=cm, display_labels=label_count_dict.keys()
 )
 disp.plot()
-plt.savefig("/hdd/LLM/SLU/results/mobi"+"_cm_new.png")
+plt.savefig("/home/simran/SLU/results/13b_mobi"+"_cm_new.png")

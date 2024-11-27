@@ -14,17 +14,16 @@ from openai import OpenAI
 random.seed(42)
 
 PER_CLASS_SAMPLES = 100
-
-client = OpenAI()
-
-from openai import OpenAI
-import json
+start = 100
 
 
-client = OpenAI()
+# client = OpenAI()
+client = OpenAI(
+  base_url = "http://localhost:8000/v1/",
+  api_key = "EMPTY"
+)
 
-
-with open("/hdd/LLM/limuBERT_data/dataset_activity_label.json","r") as f:
+with open("/home/simran/limuBERT_data/dataset_activity_label.json","r") as f:
     dataset_activity_label_dict = json.load(f)
 
 unique_classes = set()
@@ -44,7 +43,7 @@ unique_classes_dict[UNCLEAR_LABEL] = idx+1
 print(unique_classes_dict)
 
 
-root_data_dir = "/hdd/LLM/limuBERT_data/extracted_data"
+root_data_dir = "/home/simran/limuBERT_data/extracted_data"
 datasets = sorted(os.listdir(root_data_dir))
 
 data_file_name = "data_20_120.npy"
@@ -63,7 +62,7 @@ prompt = (
 )
 
 
-result_f = open("/hdd/LLM/SLU/results/gpt35_limubert_fine_tuned.txt","w")
+result_f = open("/home/simran/SLU/results/vicuna13b_limubert_har.txt","w")
 
 
 def sensor_subsampled_string(data, n=60):
@@ -92,8 +91,8 @@ def gpt_imu_classification(accl_str, gyro_str):
         },
     ]
     params = {
-        # "model": "gpt-3.5-turbo",
-        "model": "ft:gpt-3.5-turbo-0125:worcester-polytechnic-institute::9WApCtou",
+        "model": "vicuna-13b-v1.5-16k",
+        # "model": "ft:gpt-3.5-turbo-0125:worcester-polytechnic-institute::9WApCtou",
         "messages": messages,
         "max_tokens": 30,
     }
@@ -106,7 +105,7 @@ def gpt_imu_classification(accl_str, gyro_str):
 for dataset in datasets:
     pred = []
     gt = []
-    
+    final_count = 0
     result_f.write(dataset+"\n")
     data = np.load(os.path.join(root_data_dir, dataset, data_file_name))
     label = np.load(os.path.join(root_data_dir, dataset, label_file_name))
@@ -114,16 +113,23 @@ for dataset in datasets:
     label_count_dict = {}
     for val in label_dict.values():
         label_count_dict[val] = 0
+    
     last_axis = last_axis_dict[dataset]
     
     for idx in tqdm(range(len(data))):
         # sample_index = random.randint(0, len(data))
         sample_index = idx
         sample_label = label_dict[str(int(label[sample_index, 0, last_axis]))]
-        if label_count_dict[sample_label] < PER_CLASS_SAMPLES:
+        if label_count_dict[sample_label] >=start and label_count_dict[sample_label] < start + PER_CLASS_SAMPLES:
+            final_count +=1
             label_count_dict[sample_label]+=1
         else:
+            label_count_dict[sample_label]+=1
             continue
+        # if label_count_dict[sample_label] < PER_CLASS_SAMPLES:
+        #     label_count_dict[sample_label]+=1
+        # else:
+        #     continue
         accl, gyro = data[sample_index][:, 0:3], data[sample_index][:, 3:6]
         accl, gyro = accl.tolist(), gyro.tolist()
         accl_str = sensor_subsampled_string(accl)
@@ -154,6 +160,5 @@ for dataset in datasets:
         # labels=list(range(len(unique_classes_dict))),
         # target_names=unique_classes_dict.keys())
     )
-
-    
+    print(final_count)
 

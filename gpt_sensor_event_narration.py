@@ -159,7 +159,7 @@ def generate_llava_finetune_narration_data(
                 ],
             }
         )
-    with open("sensor_event_narration_llava_train.json", "w") as f:
+    with open("sensor_event_narration_llasa_train.json", "w") as f:
         json.dump(train_json_list, f)
 
 

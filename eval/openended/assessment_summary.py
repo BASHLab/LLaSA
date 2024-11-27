@@ -3,7 +3,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
-with open('/hdd/LLM/SLU/results/openended/assessments.txt','r') as f:
+with open('/home/simran/SLU/results/openended/assessments.txt','r') as f:
     assessments = f.read()
 
 
@@ -33,5 +33,5 @@ outputs = result.choices[0].message.content
 
 print(outputs)
 
-with open('/hdd/LLM/SLU/results/openended/assessments_summary.txt','w') as f:
+with open('/home/simran/SLU/results/openended/assessments_summary_v2.txt','w') as f:
     f.write(outputs)

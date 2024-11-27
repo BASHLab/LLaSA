@@ -13,7 +13,7 @@ from openai import OpenAI
 
 random.seed(42)
 start = 150
-PER_CLASS_SAMPLES = 20
+PER_CLASS_SAMPLES = 100
 
 client = OpenAI()
 

@@ -99,7 +99,7 @@ def openended_qa_generation(accl_str, gyro_str, label, location, category):
             "content": (
                 f"{prompt}"
                 "Write the QA pairs in the following format: "
-                f"1. Q: \n A: \n 2. Q: \n A: \n"
+                "1. Q: \n A: \n 2. Q: \n A: \n"
             )
         },
         {

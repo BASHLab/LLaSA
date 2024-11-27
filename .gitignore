@@ -1,8 +1,15 @@
 *.jsonl
+*.json
 *.png
 *.txt
 *.csv
 *.npy
+*.zip
+checkpoints*/
+slurms*/
+*.out
+
+*.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

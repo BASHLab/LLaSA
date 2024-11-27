@@ -15,13 +15,12 @@ random.seed(42)
 start = 0
 PER_CLASS_SAMPLES = 100
 
-client = OpenAI()
 
-from openai import OpenAI
-import json
-
-
-client = OpenAI()
+# client = OpenAI()
+client = OpenAI(
+  base_url = "http://localhost:8000/v1/",
+  api_key = "EMPTY"
+)
 
 
 
@@ -40,8 +39,8 @@ print(unique_classes_dict)
 
 
 
-data_file_name = "/hdd/LLM/SHL/data_20Hz_shl.npy"
-label_file_name = "/hdd/LLM/SHL/label_20Hz_shl.npy"
+data_file_name = "/home/simran/SHL/data_20Hz_shl.npy"
+label_file_name = "/home/simran/SHL/label_20Hz_shl.npy"
 
 
 answer_format = "The identified class is: "
@@ -53,7 +52,7 @@ prompt = (
 )
 
 
-result_f = open("/hdd/LLM/SLU/simpletest_gpt35_nur_non_finetuned_shl.txt","w")
+result_f = open("/home/simran/SLU/results/vicuna13b_shl.txt","w")
 
 
 def sensor_subsampled_string(data, n=60):
@@ -83,7 +82,7 @@ def gpt_imu_classification(accl_str, gyro_str):
     ]
     params = {
         # "model": "ft:gpt-3.5-turbo-0125:worcester-polytechnic-institute::9WApCtou",
-        "model": "gpt-3.5-turbo",
+        "model": "vicuna-13b-v1.5-16k",
         "messages": messages,
         "max_tokens": 30,
     }
@@ -154,4 +153,4 @@ disp = ConfusionMatrixDisplay(
     confusion_matrix=cm, display_labels=label_count_dict.keys()
 )
 disp.plot()
-plt.savefig("/hdd/LLM/SLU/results/shl_gpt_non_f"+"_cm.png")
+plt.savefig("/home/simran/SLU/results/shl_gpt_nemotron_non_f"+"_cm.png")

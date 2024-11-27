@@ -15,21 +15,23 @@ import matplotlib.pyplot as plt
 
 import torch
 
+seed = 42
+
 random.seed(42)
 np.random.seed(42)
-torch.manual_seed(42)
-torch.cuda.manual_seed(42)
-torch.cuda.manual_seed_all(42)
+torch.manual_seed(seed)
+torch.cuda.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)
 
 torch.use_deterministic_algorithms = True
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
 
-PER_CLASS_SAMPLES = 100
+PER_CLASS_SAMPLES = 10
 
 
-with open("/hdd/LLM/limuBERT_data/dataset_activity_label.json","r") as f:
+with open("/home/simran/limuBERT_data/dataset_activity_label.json","r") as f:
     dataset_activity_label_dict = json.load(f)
 
 unique_classes = set()
@@ -49,7 +51,7 @@ unique_classes_dict[UNCLEAR_LABEL] = idx+1
 print(unique_classes_dict)
 
 
-root_data_dir = "/hdd/LLM/limuBERT_data/extracted_data"
+root_data_dir = "/home/simran/limuBERT_data/extracted_data"
 datasets = sorted(os.listdir(root_data_dir))
 
 data_file_name = "data_20_120.npy"
@@ -60,8 +62,13 @@ last_axis_dict = {
 }
 
 
-# model_path = "/hdd/LLM/llava_llasa_first_test_model"
-model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-lora"
+model_path = "/home/simran/LLaVA/checkpoints7/llava-v1.5-13b-llasa2-limu4"
+# model_path = "/home/simran/LLaVA/checkpoints7/llava-v1.5-13b-llasa2-limu4-lr3e-5-mmlr1e-4-e1-r8-a8-proj1-lora"
+# model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa_v1"
+# model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa2-lr3e-5-mmlr1e-4-e1-r128-a128-lora"
+# model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-llasa_v1"
+# model_path = "/home/simran/llava_llasa_first_test_model"
+# model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-lora"
 # model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-pretrain"
 
 answer_format = "The identified class is: "
@@ -76,10 +83,10 @@ prompt = (
     # "identified class as a summary followed by 'Class:'."
     # "Don't write a full sentence."
 )
-# image_file = "/hdd/LLM/limuBERT_data/train_llasa/images/sensor_image_20000_1.npy"
+# image_file = "/home/simran/limuBERT_data/train_llasa/images/sensor_image_20000_1.npy"
 
 
-result_f = open("/hdd/LLM/SLU/results/llasa_limubertdatasets.txt","w")
+result_f = open("/home/simran/SLU/results/llasa_limubertdatasets_deterministic_13b.txt","w")
 # sample_indices = [5, 9, 12, 1199, 2000]
 
 for dataset in datasets:
@@ -98,7 +105,7 @@ for dataset in datasets:
     for idx in tqdm(range(len(data))):
         sample_index = random.randint(0, len(data))
         # sample_index = idx
-        image_file = f"/hdd/LLM/limuBERT_data/train_llasa/images/{dataset}/sensor_image_{sample_index}.npy"
+        image_file = f"/home/simran/limuBERT_data/train_llasa/images/{dataset}/sensor_image_{sample_index}.npy"
         if not os.path.exists(image_file):
             continue
         
@@ -110,8 +117,8 @@ for dataset in datasets:
         result_f.write(image_file+"\n")
         args = type('Args', (), {
             "model_path": model_path,
-            # "model_base": None,
-            "model_base": "lmsys/vicuna-7b-v1.5",
+            "model_base": None,
+            # "model_base": "lmsys/vicuna-13b-v1.5-16K",
             "model_name": get_model_name_from_path(model_path),
             "query": prompt,
             "conv_mode": None,
@@ -123,7 +130,12 @@ for dataset in datasets:
             "max_new_tokens": 150
         })()
         result_f.write(f"True: {sample_label}\n")
+        
+        # import pdb;pdb.set_trace()
+        
         outputs = eval_model(args)
+        print(outputs)
+        print("===============================")
         result_f.write(f"{outputs}\n")
         
         gt.append(unique_classes_dict[sample_label])
@@ -147,6 +159,8 @@ for dataset in datasets:
                     label_count_dict[UNCLEAR_LABEL] = 0
                 else:
                     label_count_dict[UNCLEAR_LABEL] += 1
+        
+        print(f"index: {sample_index} pred: {pred[-1]}, gt: {gt[-1]}")
 
     result_f.write(classification_report(
         gt, pred, 
@@ -162,4 +176,4 @@ for dataset in datasets:
         xticks_rotation='vertical'
     )
     plt.tight_layout()
-    plt.savefig("/hdd/LLM/SLU/results/"+dataset+"_cm.png", pad_inches=5)
+    plt.savefig("/home/simran/SLU/results/13b_"+dataset+"_cm.png", pad_inches=5)
