@@ -2,7 +2,7 @@
 
 # LLaSA: A Multimodal Large Language Model for Human Activity Analysis Using Sensor Data
 
-[LLaSA Demo](llasa_demo.png "A comparison between GPT-3.5 Turbo and LLaSA when responding to a query about potential obstacles encountered while vacuuming. GPT-3.5 Turbo provides a generalized instruction on analyzing IMU data, while LLaSA directly interprets the data, identifying specific sensor readings like high peaks in z-axis acceleration and rapid gyroscope changes to detect obstacles. This showcases LLaSA’s ability to offer precise, data-driven, and contextually relevant answers.")
+![LLaSA Demo](llasa_demo.png "A comparison between GPT-3.5 Turbo and LLaSA when responding to a query about potential obstacles encountered while vacuuming. GPT-3.5 Turbo provides a generalized instruction on analyzing IMU data, while LLaSA directly interprets the data, identifying specific sensor readings like high peaks in z-axis acceleration and rapid gyroscope changes to detect obstacles. This showcases LLaSA’s ability to offer precise, data-driven, and contextually relevant answers.")
 
 This repository hosts the code and datasets for **LLaSA (Large Language and Sensor Assistant)**, a multimodal large language model that integrates inertial measurement units (IMUs) with natural language understanding. Built on **LIMU-BERT** and **Llama**, LLaSA is designed to interpret and respond to complex queries about human activities and motion by combining sensor data with contextual reasoning.
 
