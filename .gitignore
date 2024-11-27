@@ -1,6 +1,7 @@
 *.jsonl
 *.json
 *.png
+!llasa_demo.png
 *.txt
 *.csv
 *.npy
