@@ -27,7 +27,14 @@ LLaSA is designed to support impactful research and practical applications in:
 
 ## Repository Contents
 - **Code**: Scripts for training, fine-tuning, and evaluating the LLaSA model.
-- **Datasets**: SensorCaps and OpenSQA [Google Drive](https://drive.google.com/drive/folders/1128HH_idfgmZnDeqQV2rjFhm4-yW7HK7?usp=share_link) (Email address: llasa.data@gmail.com)
+- **Datasets**: SensorCaps and OpenSQA 
+    - [Google Drive](https://drive.google.com/drive/folders/1128HH_idfgmZnDeqQV2rjFhm4-yW7HK7?usp=share_link) (Email address: llasa.data@gmail.com)
+    -Huggingface:
+        - [SensorCaps](https://huggingface.co/datasets/BASH-Lab/SensorCaps)
+        - [OpenSQA](https://huggingface.co/datasets/BASH-Lab/OpenSQA)
+        - [LLaSA-7B](https://huggingface.co/BASH-Lab/LLaSA-7B)
+        - [LLaSA-13B](https://huggingface.co/BASH-Lab/LLaSA-13B)
+
 - **Documentation**: Instructions for replicating experiments and integrating LLaSA into your projects.
 
 

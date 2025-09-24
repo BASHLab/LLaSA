@@ -3,6 +3,7 @@
 *.png
 !llasa_demo.png
 *.txt
+!llasa_limubertdatasets.txt
 *.csv
 *.npy
 *.zip
