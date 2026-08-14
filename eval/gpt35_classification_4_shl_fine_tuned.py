@@ -16,11 +16,11 @@ start = 0
 PER_CLASS_SAMPLES = 100
 
 
-# client = OpenAI()
-client = OpenAI(
-  base_url = "http://localhost:8000/v1/",
-  api_key = "EMPTY"
-)
+client = OpenAI()
+# client = OpenAI(
+#   base_url = "http://localhost:8000/v1/",
+#   api_key = "EMPTY"
+# )
 
 
 
@@ -52,7 +52,7 @@ prompt = (
 )
 
 
-result_f = open("/home/simran/SLU/results/vicuna13b_shl.txt","w")
+result_f = open("/home/simran/SLU/results/o3-mini_shl.txt","w")
 
 
 def sensor_subsampled_string(data, n=60):
@@ -82,9 +82,9 @@ def gpt_imu_classification(accl_str, gyro_str):
     ]
     params = {
         # "model": "ft:gpt-3.5-turbo-0125:worcester-polytechnic-institute::9WApCtou",
-        "model": "vicuna-13b-v1.5-16k",
+        "model": "o3-mini",
         "messages": messages,
-        "max_tokens": 30,
+        "max_completion_tokens": 30,
     }
 
     result = client.chat.completions.create(**params)

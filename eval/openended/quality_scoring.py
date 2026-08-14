@@ -33,7 +33,7 @@ image_dir = "/home/simran/SLU/eval/human/bash_qa_base"
 # model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa_v2_small"
 # model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa2-lr1e-4-mmlr1e-4-e1-r8-a8-lora"
 
-checkpoint_dir = "/home/simran/LLaVA/checkpoints3/"
+checkpoint_dir = "/home/simran/SLU/LLaSA/checkpoints3/"
 model_names = [
     "llava-v1.5-13b-llasa2-lr3e-5-mmlr1e-4-e1-r8-a8-proj1-lora"
     # dirname 
@@ -43,52 +43,26 @@ model_names = [
 
 print(model_names)
 
-def get_gpt_answer(accl_str, gyro_str, q):
-    messages = [
-        {
-            "role": "system",
-            "content": (
-                "You are a helpful assistant."
-            )
-        },
-        {
-            "role": "user",
-            "content": (
-                f"{q}\n"
-                f"Gyroscope: {gyro_str}\n"
-                f"Accelerometer: {accl_str}"
-            ),
-        },
-    ]
-    params = {
-        "model": "gpt-4o-mini",
-        "messages": messages,
-        "max_tokens": 250,
-    }
-
-    result = client.chat.completions.create(**params)
-    outputs = result.choices[0].message.content
-    return outputs
-
 
 def quality_scoring(q, standard_answer, activity_label, sensor_location, predicted_answer):
     messages = [
         {
             "role": "system",
             "content": (
-                "You are an expert at assessing the quality of predicted answers "
-                "based on questions related to IMU data and given information. "
-                "Please use the 'Standard Answer', 'Activity Label', and 'Sensor Location' "
-                "to assess the 'Predicted Answer' "
-                "based on the correctness, completeness, consistency, and helpfulness "
-                "of the predicted answer. "
-                "Give a single overall score in the following "
-                "format on a scale of 0 to 100:\n"
-                "Quality score: \n"
-                "Then give a short summary of the assessment in a couple of sentences "
-                "followed by 'Assessment:'. "
-                "Finally, provide a verdict whether the answer is good or bad followed by "
-                "'Verdict:'."
+                "Assume that you are an expert at assessing the quality of predicted answers based on questions related to IMU data and given information. Please use the ‘Standard Answer,’ ‘Activity Label,’ and ‘Sensor Location’ to assess the ‘Predicted Answer’ based on the correctness, completeness, consistency, and helpfulness of the predicted answer. Every question is given accelerometer and gyroscope data. So, do not only look at the general answer; check if the answer provided any insights from the data. Provide a single overall score for each answer on a scale of 0 to 100 using the following format: ‘Quality score:’ and then, give a brief summary of the assessment in 3-4 sentences, followed by ‘Assessment:’. Be specific in evaluating the accuracy, detail, and relevance of the predicted answer in relation to the expected standard."
+                # "You are an expert at assessing the quality of predicted answers "
+                # "based on questions related to IMU data and given information. "
+                # "Please use the 'Standard Answer', 'Activity Label', and 'Sensor Location' "
+                # "to assess the 'Predicted Answer' "
+                # "based on the correctness, completeness, consistency, and helpfulness "
+                # "of the predicted answer. "
+                # "Give a single overall score in the following "
+                # "format on a scale of 0 to 100:\n"
+                # "Quality score: \n"
+                # "Then give a short summary of the assessment in a couple of sentences "
+                # "followed by 'Assessment:'. "
+                # "Finally, provide a verdict whether the answer is good or bad followed by "
+                # "'Verdict:'."
             )
         },
         {
@@ -137,7 +111,7 @@ for model_name in model_names:
     
     
     average_score_all_categories = 0
-    assessments_f = open(f'/home/simran/SLU/results/openended/assessments_human_{model_name}.txt','w')
+    assessments_f = open(f'/home/simran/SLU/results/openended/assessments_human_7b_rerun.txt','w')
     model_path = os.path.join(checkpoint_dir, model_name)
     for category in categories:
         total_gpt_score = 0

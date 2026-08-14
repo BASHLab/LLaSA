@@ -76,12 +76,10 @@ def eval_model(args):
         conv_mode = "mistral_instruct"
     elif "v1.6-34b" in model_name.lower():
         conv_mode = "chatml_direct"
-    elif "v1" in model_name.lower():
-        conv_mode = "llava_v1"
     elif "mpt" in model_name.lower():
         conv_mode = "mpt"
     else:
-        conv_mode = "llava_v0"
+        conv_mode = "llava_v1"
 
     if args.conv_mode is not None and conv_mode != args.conv_mode:
         print(

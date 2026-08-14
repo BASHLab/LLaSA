@@ -6,13 +6,13 @@ cat <<EoF
 #SBATCH -N 1
 #SBATCH -n 10
 #SBATCH --mem=8g
-#SBATCH -J "llasa pretrain lr $lr epoch $epoch"
+#SBATCH -J "llasa-16k pretrain lr $lr epoch $epoch"
 #SBATCH -p short
 #SBATCH -t 12:00:00
 #SBATCH --gres=gpu:2
 #SBATCH -C A100
 
-echo "pretrain lr $lr epoch $epoch"
+echo "pretrain 16k lr $lr epoch $epoch"
 nvidia-smi
 bash scripts/v1_5/pretrain_llasa_variable.sh $lr $epoch
 EoF

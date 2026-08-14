@@ -42,7 +42,7 @@ class CLIPVisionTower(nn.Module):
         data, train_cfg, model_cfg, mask_cfg, dataset_cfg = load_pretrain_data_config(args)
         # pipeline = [Preprocess4Normalization(model_cfg.feature_num), Preprocess4Mask(mask_cfg)]
         model = LIMUBertModel4Pretrain(model_cfg)
-        model.load_state_dict(torch.load("../model_4.pt", map_location=self.device))
+        model.load_state_dict(torch.load("/home/simran/model_4.pt", map_location=self.device))
         # model = model.to(device=self.device, dtype=self.dtype)
         self.image_processor = torch.nn.Identity()
         self.vision_tower = nn.Sequential(list(model.children())[0])

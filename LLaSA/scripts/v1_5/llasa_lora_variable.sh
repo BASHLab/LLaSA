@@ -13,7 +13,7 @@ deepspeed --master_port $RANDOM llava/train/train_mem.py \
     --lora_enable True --lora_r $lora_r --lora_alpha $lora_alpha --mm_projector_lr $mm_lr \
     --deepspeed ./scripts/zero3.json \
     --version v1 \
-    --data_path /home/simran/llasa_training_v2_raw_fixed.jsonl \
+    --data_path /home/simran/llasa_training_v2_fixed.jsonl \
     --image_folder /home/simran/limuBERT_data/train_llasa/images/ \
     --vision_tower /home/simran/model_4.pt \
     --pretrain_mm_mlp_adapter $adapter_path/mm_projector.bin \

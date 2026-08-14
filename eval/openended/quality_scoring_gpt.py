@@ -8,24 +8,27 @@ from tqdm import tqdm
 
 from openai import OpenAI
 
-SAMPLE_PER_CATEGORY = 10
+SAMPLE_PER_CATEGORY = 50
 
 
 client_gpt = OpenAI()
 client = OpenAI(
-  base_url = "https://integrate.api.nvidia.com/v1",
-  api_key = "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"
+  base_url = "http://localhost:8000/v1/",
+  api_key = "EMPTY"
 )
 
 
-categories = ["science", "narration", "reliability"]  #, "math"]
+# categories = ["science", "narration", "reliability"]  #, "math"]
+categories = ["narration", "reliability"]  #,  "math"]
+benchmark_dir = "/home/simran/SLU/eval/human/bash_qa_benchmark"
+image_dir = "/home/simran/SLU/eval/human/bash_qa_base" 
 
 # model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-lora"
 # model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa_v2_small"
 # model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa2-lr1e-4-mmlr1e-4-e1-r8-a8-lora"
 
 # checkpoint_dir = "/home/simran/LLaVA/checkpoints3/"
-model_names = ["llama2_70b"]
+model_names = ["human_vicuna_13b"]
 
 print(model_names)
 
@@ -48,7 +51,7 @@ def get_gpt_answer(accl_str, gyro_str, q):
     ]
     params = {
         # "model": "gpt-4o-mini",
-        "model": "meta/llama2-70b",
+        "model": "vicuna-13b-v1.5-16k",
         "messages": messages,
         "max_tokens": 150,
     }
@@ -63,6 +66,7 @@ def quality_scoring(q, standard_answer, activity_label, sensor_location, predict
         {
             "role": "system",
             "content": (
+                # "Assume that you are an expert at assessing the quality of predicted answers based on questions related to IMU data and given information. Please use the ‘Standard Answer,’ ‘Activity Label,’ and ‘Sensor Location’ to assess the ‘Predicted Answer’ based on the correctness, completeness, consistency, and helpfulness of the predicted answer. Every question is given accelerometer and gyroscope data. So, do not only look at the general answer; check if the answer provided any insights from the data. Provide a single overall score for each answer on a scale of 0 to 100 using the following format: ‘Quality score:’ and then, give a brief summary of the assessment in 3-4 sentences, followed by ‘Assessment:’. Be specific in evaluating the accuracy, detail, and relevance of the predicted answer in relation to the expected standard."
                 "You are an expert at assessing the quality of predicted answers "
                 "based on questions related to IMU data and given information. "
                 "Please use the 'Standard Answer', 'Activity Label', and 'Sensor Location' "
@@ -132,7 +136,9 @@ for model_name in model_names:
         # csvwriter = csv.writer(csvfile)
         # csvwriter.writerow(fields)
         
-        category_test_data = json.load(open(f'/home/simran/PAMAP2/qa_benchmark/{category}_test.jsonl', 'r'))
+        category_test_data = json.load(
+            open(os.path.join(benchmark_dir,f'{category}_test.jsonl'),'r')
+        )
         category_test_data = random.sample(category_test_data, SAMPLE_PER_CATEGORY)
         for sample in tqdm(category_test_data):
             sensor_location = sample["id"].split("_")[0]
@@ -141,7 +147,8 @@ for model_name in model_names:
             q = sample["conversations"][0]["value"].replace("<image>\n", "")
             standard_answer = sample["conversations"][1]["value"]
             
-            data = np.load(filepath)
+            # data = np.load(filepath)
+            data = np.load(os.path.join(image_dir,filepath))
             
             accl, gyro = data[:, 0:3], data[:, 3:6]
             accl, gyro = accl.tolist(), gyro.tolist()

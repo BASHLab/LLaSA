@@ -61,12 +61,12 @@ last_axis_dict = {
     "hhar": 2, "motion":0, "shoaib":0, "uci":0
 }
 
-
-model_path = "/home/simran/LLaVA/checkpoints7/llava-v1.5-13b-llasa2-limu4"
+model_path = "LLaSA-7B"
+# model_path = "/home/simran/LLaVA/checkpoints7/llava-v1.5-13b-llasa2-limu4"
 # model_path = "/home/simran/LLaVA/checkpoints7/llava-v1.5-13b-llasa2-limu4-lr3e-5-mmlr1e-4-e1-r8-a8-proj1-lora"
 # model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa_v1"
 # model_path = "/home/simran/LLaVA/checkpoints/llava-v1.5-13b-llasa2-lr3e-5-mmlr1e-4-e1-r128-a128-lora"
-# model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-llasa_v1"
+# model_path = "/home/simran/SLU/LLaSA/checkpoints/llava-v1.5-13b-llasa_v1"
 # model_path = "/home/simran/llava_llasa_first_test_model"
 # model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-lora"
 # model_path = "/hdd/shouborno/llava-experiment/LLaVA/checkpoints/llava-v1.5-13b-pretrain"
@@ -86,7 +86,7 @@ prompt = (
 # image_file = "/home/simran/limuBERT_data/train_llasa/images/sensor_image_20000_1.npy"
 
 
-result_f = open("/home/simran/SLU/results/llasa_limubertdatasets_deterministic_13b.txt","w")
+result_f = open("/home/simran/SLU/results/llasa_test.txt","w")
 # sample_indices = [5, 9, 12, 1199, 2000]
 
 for dataset in datasets:
@@ -176,4 +176,4 @@ for dataset in datasets:
         xticks_rotation='vertical'
     )
     plt.tight_layout()
-    plt.savefig("/home/simran/SLU/results/13b_"+dataset+"_cm.png", pad_inches=5)
+    plt.savefig("/home/simran/SLU/results/test_"+dataset+"_cm.png", pad_inches=5)
